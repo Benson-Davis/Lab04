@@ -19,7 +19,7 @@
             <label>Title: </label>
             <input type="text" name="titleText" value="${theNote.title}"><br>
             <label>Contents: </label>
-            <textarea name="contentsText" value="${theNote.contents}" rows="6" cols="30" ></textarea><br>
+            <textarea name="contentsText" rows="6" cols="30" >${theNote.contents}</textarea><br>
             <input type="submit" name="submitButton" value="Save">
         </form>
     </body>

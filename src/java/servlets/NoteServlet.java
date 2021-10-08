@@ -34,28 +34,55 @@ public class NoteServlet extends HttpServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-        String path = getServletContext().getRealPath("/WEB-INF/note.txt");//get the path to the file on the executing machine
-        BufferedReader reader = new BufferedReader(new FileReader(new File(path)));//create a reader for the file
-        String titleAndContents = "";
-        //check that the note contains text. If not, provide default text
-        //if(reader.readLine() == null || reader.readLine().equals(""))
-        if(reader.ready() == false)
-        {
-            titleAndContents = "This is the title/Contents go here"; 
-        } else
-        {
-            titleAndContents = reader.readLine();
-        }
-        String[] splitNote = titleAndContents.split("/");//split note into title and contents based on the delimiter added upon save
-        Note currentNote = new Note(splitNote[0], splitNote[1]);//create a Note object with the saved values for attributes
-        request.setAttribute("theNote", currentNote);//set attribute to be the Note pulled from the file
-        reader.close();
+        
         if(request.getParameter("edit") == null)
         {
+            String path = getServletContext().getRealPath("/WEB-INF/note.txt");//get the path to the file on the executing machine
+            BufferedReader reader = new BufferedReader(new FileReader(new File(path)));//create a reader for the file
+            String title = "";
+            String contents = "";
+
+            //Note note = (Note)request.getAttribute("theNote");
+
+            if(reader.ready() == false)
+            {
+
+            } else
+            {
+                title = reader.readLine();
+                while(reader.ready())
+                {
+                    contents += reader.readLine();
+                }
+            }
+            Note currentNote = new Note(title, contents);//create a Note object with the saved values for attributes
+            request.setAttribute("theNote", currentNote);//set attribute to be the Note pulled from the file
+            reader.close();
             getServletContext().getRequestDispatcher("/WEB-INF/viewnote.jsp").forward(request, response);
             return;
         } else 
         {
+            String path = getServletContext().getRealPath("/WEB-INF/note.txt");//get the path to the file on the executing machine
+            BufferedReader reader = new BufferedReader(new FileReader(new File(path)));//create a reader for the file
+            String title = "";
+            String contents = "";
+
+            //Note note = (Note)request.getAttribute("theNote");
+
+            if(reader.ready() == false)
+            {
+
+            } else
+            {
+                title = reader.readLine();
+                while(reader.ready())
+                {
+                    contents += reader.readLine();
+                }
+            }
+            Note currentNote = new Note(title, contents);//create a Note object with the saved values for attributes
+            request.setAttribute("theNote", currentNote);//set attribute to be the Note pulled from the file
+            reader.close();
             getServletContext().getRequestDispatcher("/WEB-INF/editnote.jsp").forward(request, response);
             return;
         }      
@@ -88,7 +115,8 @@ public class NoteServlet extends HttpServlet
         
         String path = getServletContext().getRealPath("/WEB-INF/note.txt");//get the path to the file on the executing machine
         PrintWriter printer = new PrintWriter(new BufferedWriter(new FileWriter(path, false)));//set up a writer to the path
-        printer.write(title + "/" + contents);//write title and contents to file, along with a delimiter
+        printer.println(title);
+        printer.println(contents);//write title and contents to file, along with a delimiter
         printer.close();
         
         getServletContext().getRequestDispatcher("/WEB-INF/viewnote.jsp").forward(request, response);
